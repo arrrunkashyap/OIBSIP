@@ -3,7 +3,7 @@ This will be my major project for collage.AI-powered voice assistant built with 
 
 <div align="center">
 
-<img src="assets/logo.png" width="220"/>
+<img src="assets/evi%20logo.png" width="220" alt="EVI Logo">
 
 # EVI AI
 
