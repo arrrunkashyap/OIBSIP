@@ -1,0 +1,7 @@
+===== BMI Calculator =====
+
+Enter your weight (kg): 70
+Enter your height (cm): 175
+
+Your BMI: 22.86
+Category: Normal Weight
