@@ -1,0 +1,10 @@
+===== Password Generator =====
+
+Enter password length: 12
+Include Uppercase? (y/n): y
+Include Lowercase? (y/n): y
+Include Numbers? (y/n): y
+Include Special Characters? (y/n): y
+
+Generated Password:
+A@7m#P2q!X9z
