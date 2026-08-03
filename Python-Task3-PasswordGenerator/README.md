@@ -3,7 +3,6 @@
 A Python application that generates secure random passwords based on user preferences.
 
 ## Features
-
 - Custom password length
 - Uppercase letters
 - Lowercase letters
