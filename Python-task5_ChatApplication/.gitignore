@@ -1,0 +1,29 @@
+# Virtual Environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# SQLite
+*.db
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Uploads
+uploads/
+
+# Downloads
+downloads/
