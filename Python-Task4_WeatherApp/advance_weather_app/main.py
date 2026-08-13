@@ -1,4 +1,4 @@
-from app.ui import WeatherApp
+from apps.ui import WeatherApp
 
 
 if __name__ == "__main__":

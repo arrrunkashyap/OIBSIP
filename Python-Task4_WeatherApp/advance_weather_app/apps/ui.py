@@ -27,8 +27,8 @@ class WeatherApp(ctk.CTk):
         # -------------------------------------------------
 
         self.title("Advanced Weather Dashboard")
-        self.geometry("1250x850")
-        self.minsize(1000, 700)
+        self.geometry("1350x850")
+        self.minsize(1050, 700)
 
         # -------------------------------------------------
         # State
@@ -103,14 +103,15 @@ class WeatherApp(ctk.CTk):
             weight=1
         )
 
-        # -------------------------------------------------
+                # -------------------------------------------------
         # HEADER
         # -------------------------------------------------
 
         header = ctk.CTkFrame(
             self,
-            height=75,
-            corner_radius=0
+            height=82,
+            corner_radius=0,
+            fg_color=("gray95", "gray10")
         )
 
         header.grid(
@@ -119,81 +120,143 @@ class WeatherApp(ctk.CTk):
             sticky="ew"
         )
 
-        header.grid_columnconfigure(
-            1,
-            weight=1
+        header.grid_columnconfigure(1, weight=1)
+
+        # -------------------------------------------------
+        # BRAND
+        # -------------------------------------------------
+
+        brand_frame = ctk.CTkFrame(
+            header,
+            fg_color="transparent"
         )
 
-        # Logo / title
-
-        ctk.CTkLabel(
-            header,
-            text="☁  Advanced Weather",
-            font=ctk.CTkFont(
-                size=28,
-                weight="bold"
-            )
-        ).grid(
+        brand_frame.grid(
             row=0,
             column=0,
-            padx=25,
-            pady=18
+            padx=(24, 18),
+            pady=12,
+            sticky="w"
         )
 
-        # Search
+        ctk.CTkLabel(
+            brand_frame,
+            text="☁",
+            font=ctk.CTkFont(size=30)
+        ).pack(
+            side="left",
+            padx=(0, 8)
+        )
 
-        self.search_entry = ctk.CTkEntry(
+        title_frame = ctk.CTkFrame(
+            brand_frame,
+            fg_color="transparent"
+        )
+
+        title_frame.pack(side="left")
+
+        ctk.CTkLabel(
+            title_frame,
+            text="WEATHER",
+            font=ctk.CTkFont(
+                size=18,
+                weight="bold"
+            )
+        ).pack(anchor="w")
+
+        ctk.CTkLabel(
+            title_frame,
+            text="Advanced Dashboard",
+            text_color="gray",
+            font=ctk.CTkFont(size=11)
+        ).pack(anchor="w")
+
+        # -------------------------------------------------
+        # SEARCH
+        # -------------------------------------------------
+
+        search_frame = ctk.CTkFrame(
             header,
-            height=42,
-            placeholder_text="Search city or ZIP / postal code..."
+            fg_color="transparent"
         )
 
-        self.search_entry.grid(
+        search_frame.grid(
             row=0,
             column=1,
             padx=8,
             sticky="ew"
         )
 
-        # Search button
+        search_frame.grid_columnconfigure(
+            0,
+            weight=1
+        )
+
+        self.search_entry = ctk.CTkEntry(
+            search_frame,
+            height=40,
+            corner_radius=10,
+            placeholder_text="Search city or ZIP / postal code..."
+        )
+
+        self.search_entry.grid(
+            row=0,
+            column=0,
+            padx=(0, 6),
+            sticky="ew"
+        )
 
         self.search_button = ctk.CTkButton(
-            header,
+            search_frame,
             text="Search",
-            width=95,
+            width=88,
+            height=40,
+            corner_radius=10,
             command=self.search_weather
         )
 
         self.search_button.grid(
             row=0,
-            column=2,
-            padx=5
+            column=1
         )
 
-        # Location button
+        # -------------------------------------------------
+        # ACTIONS
+        # -------------------------------------------------
+
+        action_frame = ctk.CTkFrame(
+            header,
+            fg_color="transparent"
+        )
+
+        action_frame.grid(
+            row=0,
+            column=2,
+            padx=(8, 20),
+            sticky="e"
+        )
 
         self.location_button = ctk.CTkButton(
-            header,
-            text="📍 My Location",
-            width=125,
+            action_frame,
+            text="📍",
+            width=42,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=18),
             command=self.detect_location
         )
 
         self.location_button.grid(
             row=0,
-            column=3,
-            padx=5
+            column=0,
+            padx=3
         )
 
-        # Temperature unit
-
         self.unit_switch = ctk.CTkSegmentedButton(
-            header,
-            values=[
-                "°C",
-                "°F"
-            ],
-            width=105,
+            action_frame,
+            values=["°C", "°F"],
+            width=100,
+            height=40,
             command=self.change_unit
         )
 
@@ -201,44 +264,40 @@ class WeatherApp(ctk.CTk):
 
         self.unit_switch.grid(
             row=0,
-            column=4,
-            padx=5
+            column=1,
+            padx=3
         )
 
-        # Theme button
-
         self.theme_button = ctk.CTkButton(
-            header,
+            action_frame,
             text="☀",
             width=42,
-            font=ctk.CTkFont(
-                size=18
-            ),
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=18),
             command=self.toggle_theme
         )
 
         self.theme_button.grid(
             row=0,
-            column=5,
-            padx=5
+            column=2,
+            padx=3
         )
 
-        # Refresh
-
         self.refresh_button = ctk.CTkButton(
-            header,
+            action_frame,
             text="↻",
             width=42,
-            font=ctk.CTkFont(
-                size=21
-            ),
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=21),
             command=self.refresh_weather
         )
 
         self.refresh_button.grid(
             row=0,
-            column=6,
-            padx=(5, 22)
+            column=3,
+            padx=3
         )
 
         # -------------------------------------------------
@@ -291,7 +350,7 @@ class WeatherApp(ctk.CTk):
 
         self.build_forecasts()
 
-    # =====================================================
+        # =====================================================
     # CURRENT WEATHER CARD
     # =====================================================
 
@@ -299,7 +358,8 @@ class WeatherApp(ctk.CTk):
 
         self.current_card = ctk.CTkFrame(
             self.body,
-            corner_radius=18
+            corner_radius=22,
+            fg_color=("gray95", "gray12")
         )
 
         self.current_card.grid(
@@ -307,40 +367,61 @@ class WeatherApp(ctk.CTk):
             column=0,
             columnspan=2,
             padx=6,
-            pady=8,
+            pady=(8, 12),
             sticky="ew"
         )
 
+        # Responsive columns
         self.current_card.grid_columnconfigure(
             1,
             weight=1
         )
 
-        # Weather icon
+        # -------------------------------------------------
+        # WEATHER ICON
+        # -------------------------------------------------
+
+        icon_frame = ctk.CTkFrame(
+            self.current_card,
+            width=150,
+            height=150,
+            corner_radius=20,
+            fg_color=("gray90", "gray18")
+        )
+
+        icon_frame.grid(
+            row=0,
+            column=0,
+            rowspan=3,
+            padx=(22, 20),
+            pady=22
+        )
+
+        icon_frame.grid_propagate(False)
 
         self.weather_icon = ctk.CTkLabel(
-            self.current_card,
+            icon_frame,
             text="☁",
             font=ctk.CTkFont(
                 size=80
             )
         )
 
-        self.weather_icon.grid(
-            row=0,
-            column=0,
-            rowspan=3,
-            padx=30,
-            pady=25
+        self.weather_icon.place(
+            relx=0.5,
+            rely=0.5,
+            anchor="center"
         )
 
-        # Location
+        # -------------------------------------------------
+        # LOCATION
+        # -------------------------------------------------
 
         self.location_label = ctk.CTkLabel(
             self.current_card,
             text="Detecting location...",
             font=ctk.CTkFont(
-                size=28,
+                size=30,
                 weight="bold"
             )
         )
@@ -349,153 +430,196 @@ class WeatherApp(ctk.CTk):
             row=0,
             column=1,
             sticky="w",
-            pady=(25, 0)
+            padx=(0, 15),
+            pady=(25, 2)
         )
 
-        # Temperature
+        # -------------------------------------------------
+        # CONDITION
+        # -------------------------------------------------
+
+        self.condition_label = ctk.CTkLabel(
+            self.current_card,
+            text="Current conditions",
+            text_color=("gray35", "gray70"),
+            font=ctk.CTkFont(
+                size=17
+            )
+        )
+
+        self.condition_label.grid(
+            row=1,
+            column=1,
+            sticky="w",
+            padx=(0, 15)
+        )
+
+        # -------------------------------------------------
+        # TEMPERATURE
+        # -------------------------------------------------
 
         self.temperature_label = ctk.CTkLabel(
             self.current_card,
             text="--",
             font=ctk.CTkFont(
-                size=55,
+                size=58,
                 weight="bold"
             )
         )
 
         self.temperature_label.grid(
-            row=1,
-            column=1,
-            sticky="w"
-        )
-
-        # Condition
-
-        self.condition_label = ctk.CTkLabel(
-            self.current_card,
-            text="",
-            font=ctk.CTkFont(
-                size=18
-            )
-        )
-
-        self.condition_label.grid(
             row=2,
             column=1,
             sticky="w",
+            padx=(0, 15),
             pady=(0, 25)
         )
 
-        # Updated time
+        # -------------------------------------------------
+        # UPDATED INFORMATION
+        # -------------------------------------------------
 
-        self.updated_label = ctk.CTkLabel(
+        updated_frame = ctk.CTkFrame(
             self.current_card,
-            text="",
-            text_color="gray"
+            fg_color="transparent"
         )
 
-        self.updated_label.grid(
+        updated_frame.grid(
             row=0,
             column=2,
-            padx=25,
-            pady=20,
+            rowspan=3,
+            padx=(10, 25),
+            pady=25,
             sticky="ne"
         )
 
-    # =====================================================
+        ctk.CTkLabel(
+            updated_frame,
+            text="LAST UPDATED",
+            text_color=("gray45", "gray60"),
+            font=ctk.CTkFont(
+                size=10,
+                weight="bold"
+            )
+        ).pack(
+            anchor="e"
+        )
+
+        self.updated_label = ctk.CTkLabel(
+            updated_frame,
+            text="--",
+            text_color=("gray35", "gray70"),
+            font=ctk.CTkFont(
+                size=13
+            )
+        )
+
+        self.updated_label.pack(
+            anchor="e",
+            pady=(3, 0)
+        )
+ 
+        # =====================================================
     # WEATHER METRICS
     # =====================================================
 
     def build_metrics(self):
 
-        self.metrics = ctk.CTkFrame(
+        metrics_frame = ctk.CTkFrame(
             self.body,
             fg_color="transparent"
         )
 
-        self.metrics.grid(
+        metrics_frame.grid(
             row=1,
             column=0,
             columnspan=2,
-            sticky="ew",
-            padx=6
+            padx=6,
+            pady=(0, 12),
+            sticky="ew"
         )
 
+        # Four cards per row
         for column in range(4):
-
-            self.metrics.grid_columnconfigure(
+            metrics_frame.grid_columnconfigure(
                 column,
                 weight=1
             )
 
-        data = [
-
-            ("feels", "Feels Like"),
-
-            ("humidity", "Humidity"),
-
-            ("wind", "Wind"),
-
-            ("pressure", "Pressure"),
-
-            ("visibility", "Visibility"),
-
-            ("clouds", "Clouds"),
-
-            ("sunrise", "Sunrise"),
-
-            ("sunset", "Sunset")
-
+        metrics = [
+            ("feels", "🌡", "Feels Like", "--"),
+            ("humidity", "💧", "Humidity", "--"),
+            ("wind", "💨", "Wind", "--"),
+            ("pressure", "⏱", "Pressure", "--"),
+            ("visibility", "👁", "Visibility", "--"),
+            ("clouds", "☁", "Clouds", "--"),
+            ("sunrise", "🌅", "Sunrise", "--"),
+            ("sunset", "🌇", "Sunset", "--"),
         ]
 
         self.metric_values = {}
 
-        for index, (key, title) in enumerate(data):
+        for index, (key, icon, title, value) in enumerate(metrics):
 
             row = index // 4
-
             column = index % 4
 
             card = ctk.CTkFrame(
-                self.metrics,
-                corner_radius=14
+                metrics_frame,
+                height=110,
+                corner_radius=16,
+                fg_color=("gray95", "gray14")
             )
 
             card.grid(
                 row=row,
                 column=column,
-                padx=4,
-                pady=4,
-                sticky="ew"
+                padx=5,
+                pady=5,
+                sticky="nsew"
             )
 
+            card.grid_propagate(False)
+
+            # Icon
             ctk.CTkLabel(
                 card,
-                text=title,
-                text_color="gray"
+                text=icon,
+                font=ctk.CTkFont(
+                    size=22
+                )
             ).pack(
-                anchor="w",
-                padx=14,
                 pady=(10, 0)
             )
 
-            value = ctk.CTkLabel(
+            # Title
+            ctk.CTkLabel(
                 card,
-                text="--",
+                text=title,
+                text_color=("gray40", "gray65"),
+                font=ctk.CTkFont(
+                    size=11,
+                    weight="bold"
+                )
+            ).pack(
+                pady=(2, 0)
+            )
+
+            # Value
+            value_label = ctk.CTkLabel(
+                card,
+                text=value,
                 font=ctk.CTkFont(
                     size=17,
                     weight="bold"
                 )
             )
 
-            value.pack(
-                anchor="w",
-                padx=14,
-                pady=(2, 11)
+            value_label.pack(
+                pady=(1, 8)
             )
 
-            self.metric_values[key] = value
-
+            self.metric_values[key] = value_label
     # =====================================================
     # SEARCH HISTORY
     # =====================================================

@@ -1,7 +1,18 @@
 import os
+import json
 import urllib.parse
 import urllib.request
-import json
+import urllib.error
+
+from pathlib import Path
+from dotenv import load_dotenv
+
+
+# Load .env from the project root
+BASE_DIR = Path(__file__).resolve().parent.parent
+ENV_FILE = BASE_DIR / ".env"
+
+load_dotenv(ENV_FILE)
 
 
 class WeatherAPIError(Exception):
@@ -20,7 +31,6 @@ class WeatherAPI:
             raise WeatherAPIError(
                 "OPENWEATHER_API_KEY is not configured."
             )
-
     # =====================================================
     # HTTP REQUEST
     # =====================================================
