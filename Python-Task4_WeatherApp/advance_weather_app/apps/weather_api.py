@@ -87,10 +87,41 @@ class WeatherAPI:
     # LOCATION
     # =====================================================
 
-    def get_location(self):
-        """
-        Detect approximate location using IP.
-        """
+        def get_location(self):
+       
+
+        # -------------------------------------------------
+        # Location Service 1
+        # -------------------------------------------------
+
+            try:
+
+                with urllib.request.urlopen(
+                    "https://ipwho.is/",
+                    timeout=8
+                ) as response:
+
+                    data = json.loads(
+                        response.read().decode("utf-8")
+                    )
+
+                if data.get("success") is False:
+                    raise WeatherAPIError(
+                        "Primary location service failed."
+                    )
+
+                latitude = data.get("latitude")
+                longitude = data.get("longitude")
+
+                if latitude is not None and longitude is not None:
+                    return latitude, longitude
+
+            except Exception:
+                pass
+
+        # -------------------------------------------------
+        # Location Service 2 - Fallback
+        # -------------------------------------------------
 
         try:
 
@@ -106,27 +137,20 @@ class WeatherAPI:
             latitude = data.get("latitude")
             longitude = data.get("longitude")
 
-            if latitude is None or longitude is None:
-                raise WeatherAPIError(
-                    "Unable to detect your location."
-                )
+            if latitude is not None and longitude is not None:
+                return latitude, longitude
 
-            return latitude, longitude
+        except Exception:
+            pass
 
-        except urllib.error.URLError:
-            raise WeatherAPIError(
-                "Unable to detect your location."
-            )
+        # -------------------------------------------------
+        # Both services failed
+        # -------------------------------------------------
 
-        except Exception as error:
-
-            if isinstance(error, WeatherAPIError):
-                raise
-
-            raise WeatherAPIError(
-                f"Location detection failed: {error}"
-            )
-
+        raise WeatherAPIError(
+            "Unable to automatically detect your location. "
+            "Please search for a city manually."
+        )
     # =====================================================
     # CURRENT WEATHER
     # =====================================================
